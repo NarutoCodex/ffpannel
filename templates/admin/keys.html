@@ -1,0 +1,80 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+  <div>
+    <a href="/admin/categories" style="color:var(--dim);font-size:12px;text-decoration:none">← Back</a>
+    <h2 style="font-size:17px;font-weight:800;margin-top:4px">🔑 Key Stock</h2>
+    <p style="color:var(--muted);font-size:12px">{{ cat.name }}</p>
+  </div>
+</div>
+
+<!-- ADD KEYS FORM -->
+<div class="card fade-up" style="border:1px solid rgba(124,58,237,.2)">
+  <p style="color:#7c3aed;font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:12px">➕ ADD NEW KEYS</p>
+  <form method="POST" action="/admin/keys/{{ cat.id }}/add">
+    <label class="lbl">SELECT PLAN</label>
+    <select class="inp" name="plan_label" id="plan-sel" onchange="setPlanPrice(this)" required style="cursor:pointer">
+      <option value="">-- Select Plan --</option>
+      {% for plan in cat.get_plans() %}
+      <option value="{{ plan.label }}" data-price="{{ plan.price }}">{{ plan.label }} — {% if plan.price==0 %}FREE{% else %}₹{{ plan.price|int }}{% endif %}</option>
+      {% endfor %}
+    </select>
+    <input type="hidden" name="plan_price" id="plan-price" value="0">
+    <label class="lbl">PASTE KEYS (one per line)</label>
+    <textarea class="inp" name="keys_text" placeholder="KEY-XXXX-YYYY-ZZZZ&#10;KEY-AAAA-BBBB-CCCC&#10;KEY-1111-2222-3333" rows="5" required></textarea>
+    <button type="submit" class="btn btn-purple btn-w" style="padding:13px;font-size:14px">➕ Add Keys to Stock</button>
+  </form>
+</div>
+
+<!-- STOCK LIST -->
+<div style="margin-top:14px">
+  {% set avail = stocks|selectattr('is_used','equalto',False)|list %}
+  {% set used = stocks|selectattr('is_used','equalto',True)|list %}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+    <div class="card" style="text-align:center;padding:12px;border:1px solid rgba(16,185,129,.2)"><p style="color:#10b981;font-size:10px;letter-spacing:1px;margin-bottom:4px">AVAILABLE</p><h3 style="color:#10b981;font-size:24px;font-weight:900">{{ avail|length }}</h3></div>
+    <div class="card" style="text-align:center;padding:12px;border:1px solid rgba(100,116,139,.2)"><p style="color:var(--dim);font-size:10px;letter-spacing:1px;margin-bottom:4px">USED</p><h3 style="color:var(--dim);font-size:24px;font-weight:900">{{ used|length }}</h3></div>
+  </div>
+
+  {% if avail %}
+  <div class="card fade-up" style="border:1px solid rgba(16,185,129,.15)">
+    <p style="color:#10b981;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:10px">✅ AVAILABLE KEYS</p>
+    {% for k in avail %}
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+      <div>
+        <p style="font-family:monospace;font-size:12px;color:#fff;word-break:break-all">{{ k.key_code }}</p>
+        <p style="color:#3b82f6;font-size:10px;margin-top:2px">{{ k.plan_label }} · {% if k.plan_price==0 %}FREE{% else %}₹{{ k.plan_price|int }}{% endif %}</p>
+      </div>
+      <form method="POST" action="/admin/keys/delete/{{ k.id }}" onsubmit="return confirm('Delete this key?')" style="flex-shrink:0;margin-left:10px">
+        <button type="submit" class="btn btn-red btn-sm">🗑️</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if used %}
+  <div class="card fade-up" style="border:1px solid rgba(100,116,139,.1)">
+    <p style="color:var(--dim);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:10px">🔒 USED KEYS</p>
+    {% for k in used %}
+    <div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);opacity:.5">
+      <p style="font-family:monospace;font-size:11px;color:var(--muted);word-break:break-all;text-decoration:line-through">{{ k.key_code }}</p>
+      <p style="color:var(--dim);font-size:10px;margin-top:2px">{{ k.plan_label }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if not stocks %}
+  <div class="card" style="text-align:center;padding:30px;color:var(--dim)">
+    <p style="font-size:36px;margin-bottom:8px">🔑</p>
+    <p style="font-size:13px">No keys added yet. Add keys above.</p>
+  </div>
+  {% endif %}
+</div>
+<script>
+function setPlanPrice(sel){
+  var opt=sel.options[sel.selectedIndex];
+  document.getElementById('plan-price').value=opt.dataset.price||'0';
+}
+</script>
+{% endblock %}

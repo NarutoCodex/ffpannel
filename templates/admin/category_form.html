@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+  <h2 style="font-size:17px;font-weight:800">{{ '✏️ Edit' if cat else '➕ New Product' }}</h2>
+  <a href="/admin/categories" class="btn btn-dark btn-sm">← Back</a>
+</div>
+<form method="POST" enctype="multipart/form-data" action="{{ '/admin/categories/edit/'~cat.id if cat else '/admin/categories/add' }}">
+<div class="card fade-up">
+  <p class="lbl" style="margin-bottom:10px;color:#7c3aed">BASIC INFO</p>
+  <label class="lbl">NAME *</label>
+  <input class="inp" name="name" placeholder="e.g. BIGBULL CHEATS INJECTOR" value="{{ cat.name if cat else '' }}" required>
+  <label class="lbl">NOTICE</label>
+  <label class="lbl">APK DOWNLOAD LINK (optional)</label>
+  <input class="inp" name="apk_link" placeholder="https://drive.google.com/... or direct APK URL" value="{{ cat.apk_link if cat else '' }}">
+  <label class="lbl" style="margin-bottom:8px">TAGS</label>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+    {% set sel=cat.get_tags() if cat else [] %}
+    {% for tag,col in [('Non Root','#3b82f6'),('Root','#f59e0b'),('Android','#8b5cf6'),('iOS','#ef4444'),('User','#10b981')] %}
+    <label style="cursor:pointer">
+      <input type="checkbox" name="tags" value="{{ tag }}" {% if tag in sel %}checked{% endif %} style="display:none" onchange="this.parentElement.style.background=this.checked?'{{ col }}':'#1e293b';this.parentElement.style.color=this.checked&&'{{ tag }}'=='Root'?'#000':'#fff'">
+      <span style="border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700;background:{{ col if tag in sel else '#1e293b' }};color:{{ '#000' if tag in sel and tag=='Root' else '#fff' }};border:1px solid {{ col }};display:inline-block;transition:.2s">{{ tag }}</span>
+    </label>
+    {% endfor %}
+  </div>
+  <label class="lbl">UPLOAD VIDEO (optional)</label>
+  <input type="file" name="video" accept="video/*" class="inp" style="padding:8px">
+  {% if cat and cat.video_path %}<p style="color:var(--green);font-size:11px;margin-bottom:8px">✅ Video: {{ cat.video_path }}</p>{% endif %}
+</div>
+<div class="card fade-up" style="animation-delay:.08s">
+  <label class="lbl">FEATURES (one per line)</label>
+  <textarea class="inp" name="features" rows="5" placeholder="Silent Aim&#10;Aimbot&#10;Auto Fire&#10;ESP">{{ cat.get_features()|join('\n') if cat else '' }}</textarea>
+</div>
+<div class="card fade-up" style="animation-delay:.12s">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <p class="lbl" style="margin:0">💰 PRICE PLANS</p>
+    <button type="button" class="btn btn-blue btn-sm" onclick="addPlan()">+ Plan</button>
+  </div>
+  <div id="plans-wrap">
+    {% if cat %}{% for p in cat.get_plans() %}
+    <div class="plan-entry" style="background:#0f2748;border-radius:10px;padding:10px;margin-bottom:8px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px">
+        <input class="inp" name="plan_label" placeholder="Label (e.g. 7 Days)" value="{{ p.label }}" required style="margin:0">
+        <input class="inp" name="plan_price" type="number" placeholder="Price" value="{{ p.price|int }}" min="0" required style="margin:0">
+      </div>
+      <button type="button" onclick="this.parentElement.remove()" class="btn btn-red btn-sm" style="width:100%">Remove</button>
+    </div>
+    {% endfor %}{% endif %}
+  </div>
+  <p style="color:var(--dim);font-size:11px;margin-top:4px">💡 Price 0 = FREE</p>
+</div>
+<div style="display:grid;grid-template-columns:1fr auto;gap:10px">
+  <button type="submit" class="btn btn-blue" style="padding:14px;font-size:14px">💾 {{ 'Update' if cat else 'Add Product' }}</button>
+  <a href="/admin/categories" class="btn btn-dark" style="padding:14px">Cancel</a>
+</div>
+</form>
+<script>
+function addPlan(){
+  var c=document.getElementById('plans-wrap');
+  var d=document.createElement('div');
+  d.className='plan-entry';
+  d.style.cssText='background:#0f2748;border-radius:10px;padding:10px;margin-bottom:8px';
+  d.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px"><input class="inp" name="plan_label" placeholder="Label (e.g. 7 Days)" required style="margin:0"><input class="inp" name="plan_price" type="number" placeholder="Price" value="0" min="0" required style="margin:0"></div><button type="button" onclick="this.parentElement.remove()" class="btn btn-red btn-sm" style="width:100%">Remove</button>';
+  c.appendChild(d);
+}
+</script>
+{% endblock %}
