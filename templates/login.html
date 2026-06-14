@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>FF PANELS - Login</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--gold:#f59e0b;--blue:#3b82f6;--green:#10b981;--red:#ef4444}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBlue{0%,100%{box-shadow:0 0 12px rgba(59,130,246,.3)}50%{box-shadow:0 0 30px rgba(59,130,246,.7),0 0 60px rgba(59,130,246,.15)}}
+@keyframes pulseGold{0%,100%{box-shadow:0 0 10px rgba(245,158,11,.2)}50%{box-shadow:0 0 22px rgba(245,158,11,.6)}}
+@keyframes floatOrb{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.04)}}
+@keyframes ripple{0%{transform:scale(0);opacity:.4}100%{transform:scale(4);opacity:0}}
+@keyframes borderGlow{0%,100%{border-color:rgba(59,130,246,.2)}50%{border-color:rgba(59,130,246,.55)}}
+@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+body{background:#060d18;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Segoe UI',sans-serif;overflow:hidden;position:relative}
+
+.bg-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.orb1{width:300px;height:300px;top:-80px;right:-80px;background:radial-gradient(circle,rgba(37,99,235,.1),transparent 70%);animation:floatOrb 6s ease-in-out infinite}
+.orb2{width:250px;height:250px;bottom:-60px;left:-60px;background:radial-gradient(circle,rgba(124,58,237,.08),transparent 70%);animation:floatOrb 8s ease-in-out infinite reverse}
+
+.card{
+  background:rgba(10,22,40,.97);border-radius:24px;padding:38px 28px;
+  width:100%;max-width:400px;text-align:center;
+  box-shadow:0 0 60px rgba(59,130,246,.06),0 30px 60px rgba(0,0,0,.5);
+  position:relative;z-index:1;
+  animation:fadeUp .5s ease,borderGlow 3s infinite;
+  border:1px solid rgba(59,130,246,.2);
+}
+.logo-wrap{
+  width:82px;height:82px;
+  background:linear-gradient(135deg,#0f2748,#1e3a5f);
+  border-radius:22px;display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;font-size:38px;
+  animation:logoFloat 3s ease-in-out infinite,pulseBlue 3s infinite;
+}
+h1{color:#fff;font-size:28px;font-weight:900;letter-spacing:2px;margin-bottom:4px;animation:fadeUp .5s .1s ease both}
+h1 span{color:var(--gold)}
+.sub{color:#64748b;font-size:13px;margin-bottom:14px;animation:fadeUp .5s .15s ease both}
+.wb{border:1px solid rgba(245,158,11,.35);border-radius:20px;padding:5px 18px;color:var(--gold);font-size:11px;letter-spacing:2px;display:inline-block;margin-bottom:22px;background:rgba(245,158,11,.05);animation:fadeUp .5s .2s ease both,pulseGold 2.5s infinite}
+
+.flash{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:10px;font-weight:600;text-align:left;animation:fadeUp .3s ease}
+.flash.error{background:#2d0a0a;border:1px solid var(--red);color:var(--red)}
+.flash.success{background:#052e16;border:1px solid var(--green);color:var(--green)}
+
+.field-wrap{text-align:left;margin-bottom:6px;animation:fadeUp .5s ease both}
+.field-wrap:nth-child(1){animation-delay:.25s}
+.field-wrap:nth-child(2){animation-delay:.3s}
+.lbl{color:#94a3b8;font-size:11px;letter-spacing:2px;margin-bottom:6px;display:block;font-weight:600}
+.inp-wrap{position:relative}
+.inp{width:100%;background:#0f2748;border:1px solid #1e3a5f;border-radius:12px;padding:14px 46px 14px 16px;color:#fff;font-size:15px;outline:none;transition:all .25s;font-family:inherit}
+.inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+
+/* Professional eye toggle — SVG only, no emoji */
+.eye-btn{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;padding:4px;
+  color:#475569;transition:color .2s;display:flex;align-items:center;
+}
+.eye-btn:hover{color:#94a3b8}
+.eye-btn:active{transform:translateY(-50%) scale(.85)}
+.eye-open,.eye-closed{display:block}
+.eye-closed{display:none}
+
+.sign-btn{
+  width:100%;background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  border:none;border-radius:12px;padding:15px;color:#fff;
+  font-size:16px;font-weight:800;cursor:pointer;margin-top:18px;
+  letter-spacing:1px;font-family:inherit;transition:all .25s;
+  box-shadow:0 6px 25px rgba(37,99,235,.4);
+  position:relative;overflow:hidden;
+  animation:fadeUp .5s .35s ease both;
+}
+.sign-btn:hover{box-shadow:0 8px 30px rgba(37,99,235,.6);transform:translateY(-1px)}
+.sign-btn:active{transform:scale(.97) translateY(0)}
+.ripple-el{position:absolute;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);animation:ripple .6s ease;pointer-events:none}
+
+.link-row{color:#64748b;font-size:13px;margin-top:18px;animation:fadeUp .5s .4s ease both}
+.link-row a{color:var(--gold);text-decoration:none;font-weight:700}
+.admin-link{color:#1e3a5f;font-size:11px;margin-top:18px;display:block;text-decoration:none;transition:.2s;animation:fadeUp .5s .45s ease both}
+.admin-link:hover{color:#475569}
+.copy{color:#0f2748;font-size:11px;margin-top:6px;animation:fadeUp .5s .5s ease both}
+.deco-line{display:flex;align-items:center;gap:10px;margin:18px 0 0}
+.deco-line::before,.deco-line::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+.deco-line span{color:#334155;font-size:10px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="card">
+  <div class="logo-wrap">⚡</div>
+  <h1>FF <span>PANELS</span></h1>
+  <p class="sub">Secure sign in to your account</p>
+  <div class="wb">WELCOME BACK</div>
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat,msg in msgs %}<div class="flash {{cat}}">{{msg}}</div>{% endfor %}
+  {% endwith %}
+  <form method="POST" action="/login" id="loginForm">
+    <div class="field-wrap">
+      <label class="lbl">USERNAME</label>
+      <div class="inp-wrap">
+        <input class="inp" style="padding-right:16px" name="username" placeholder="Enter your username" autocomplete="username" required>
+      </div>
+    </div>
+    <div class="field-wrap">
+      <label class="lbl">PASSWORD</label>
+      <div class="inp-wrap">
+        <input class="inp" name="password" id="pw" type="password" placeholder="Enter your password" required>
+        <button type="button" class="eye-btn" id="eyeBtn" onclick="togglePw()" aria-label="Toggle password visibility">
+          <!-- Eye open icon -->
+          <svg class="eye-open" id="iconOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <!-- Eye closed icon -->
+          <svg class="eye-closed" id="iconClosed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="sign-btn" type="submit" id="signBtn">Sign In</button>
+  </form>
+  <div class="deco-line"><span>OR</span></div>
+  <p class="link-row">New here? <a href="/register">Create Account</a></p>
+  <a href="/admin" class="admin-link">Owner Panel</a>
+  <p class="copy">© 2026 FF Panels • All Rights Reserved</p>
+</div>
+<script>
+function togglePw(){
+  var i=document.getElementById('pw');
+  var open=document.getElementById('iconOpen');
+  var closed=document.getElementById('iconClosed');
+  if(i.type==='password'){
+    i.type='text';
+    open.style.display='none';
+    closed.style.display='block';
+  } else {
+    i.type='password';
+    open.style.display='block';
+    closed.style.display='none';
+  }
+}
+document.getElementById('signBtn').addEventListener('click',function(e){
+  var btn=this,rect=btn.getBoundingClientRect();
+  var el=document.createElement('span');
+  el.className='ripple-el';
+  var size=Math.max(btn.offsetWidth,btn.offsetHeight)*2;
+  el.style.cssText='width:'+size+'px;height:'+size+'px;left:'+(e.clientX-rect.left-size/2)+'px;top:'+(e.clientY-rect.top-size/2)+'px';
+  btn.appendChild(el);
+  setTimeout(function(){el.remove()},600);
+});
+</script>
+</body>
+</html>

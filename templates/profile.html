@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block mn_profile %}active{% endblock %}
+{% block body %}
+<div class="app">
+  <div class="hdr">
+    <button class="menu-btn" onclick="openMenu()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="19" r="1.2" fill="currentColor"/></svg>
+    </button>
+    <div class="hdr-logo">⚡ <span>FF PANELS</span></div>
+    <a href="/logout" class="hdr-bal" style="color:#ef4444;border-color:#ef4444;animation:none">🚪 Logout</a>
+  </div>
+  <div class="scrl">
+    {% with msgs = get_flashed_messages(with_categories=true) %}{% for c,m in msgs %}<div class="flash {{c}}">{{m}}</div>{% endfor %}{% endwith %}
+    <h2 class="page-title">👤 Profile</h2>
+    <div class="card">
+      <p style="color:var(--muted);font-size:11px;letter-spacing:2px;margin-bottom:14px;font-weight:700">ACCOUNT INFORMATION</p>
+      {% for label,val,col in [('👤 Username',user.username,''),('✉️ Email',user.email,''),('🛡️ Role','USER','#3b82f6'),('💳 Balance','₹'~'%.2f'|format(user.balance),'#f59e0b')] %}
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap">
+        <span style="color:var(--dim);font-size:14px">{{ label }}</span>
+        <span style="font-weight:700;font-size:14px;{% if col %}color:{{ col }}{% endif %};word-break:break-all;text-align:right">{{ val }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="card">
+      <p style="color:var(--muted);font-size:11px;letter-spacing:2px;margin-bottom:14px;font-weight:700">🔐 CHANGE PASSWORD</p>
+      <form method="POST" action="/profile">
+        <label class="lbl">NEW PASSWORD</label>
+        <input class="inp" type="password" name="new_password" placeholder="Min 6 characters">
+        <label class="lbl">CONFIRM PASSWORD</label>
+        <input class="inp" type="password" name="confirm_password" placeholder="Repeat new password">
+        <button class="btn btn-gold btn-w" type="submit" style="padding:13px">Update Password</button>
+      </form>
+    </div>
+    <a href="/logout" class="btn btn-red btn-w" style="text-decoration:none;padding:13px;display:block;text-align:center;margin-top:0">🚪 Logout</a>
+  </div>
+  <nav class="bnav">
+    <a href="/home">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
+      Home
+    </a>
+    <a href="/store">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Store
+    </a>
+    <a href="/keys">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="15" r="4"/><path d="M12 15h8M16 11v8"/></svg>
+      Keys
+    </a>
+    <a href="/profile" class="active">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+  </nav>
+</div>
+{% endblock %}

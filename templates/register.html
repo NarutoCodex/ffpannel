@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>FF PANELS - Register</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#f59e0b;--blue:#3b82f6;--green:#10b981;--red:#ef4444}
+body{background:radial-gradient(ellipse at 50% 0%,#0f1929 0%,#060d18 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Segoe UI',sans-serif}
+.card{background:rgba(10,22,40,.97);border:1px solid #1e3a5f;border-radius:20px;padding:36px 28px;width:100%;max-width:400px;text-align:center;box-shadow:0 0 80px rgba(59,130,246,.1)}
+.logo{width:78px;height:78px;background:linear-gradient(135deg,#0f2748,#1e3a5f);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px}
+.flash{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:10px;font-weight:600;text-align:left}
+.flash.error{background:#2d0a0a;border:1px solid var(--red);color:var(--red)}
+.flash.success{background:#052e16;border:1px solid var(--green);color:var(--green)}
+.lbl{color:#94a3b8;font-size:11px;letter-spacing:2px;margin-bottom:6px;display:block;font-weight:600;text-align:left}
+.inp{width:100%;background:#0f2748;border:1px solid #1e3a5f;border-radius:10px;padding:13px 16px;color:#fff;font-size:15px;outline:none;margin-bottom:10px}
+.inp:focus{border-color:var(--blue)}
+.reg-btn{width:100%;background:linear-gradient(135deg,#f59e0b,#d97706);border:none;border-radius:10px;padding:14px;color:#000;font-size:16px;font-weight:800;cursor:pointer;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">⚡</div>
+  <h1 style="color:#fff;font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:4px">FF <span style="color:#f59e0b">PANELS</span></h1>
+  <p style="color:#64748b;font-size:13px;margin-bottom:20px">Create your free account</p>
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat,msg in msgs %}<div class="flash {{cat}}">{{msg}}</div>{% endfor %}
+  {% endwith %}
+  <form method="POST" action="/register">
+    <label class="lbl">USERNAME</label>
+    <input class="inp" name="username" placeholder="Choose a username" required>
+    <label class="lbl">EMAIL</label>
+    <input class="inp" name="email" type="email" placeholder="Enter your email" required>
+    <label class="lbl">PASSWORD</label>
+    <input class="inp" name="password" type="password" placeholder="Min 6 characters" required>
+    <label class="lbl">CONFIRM PASSWORD</label>
+    <input class="inp" name="confirm_password" type="password" placeholder="Repeat password" required>
+    <button class="reg-btn" type="submit">Create Account ✨</button>
+  </form>
+  <p style="color:#64748b;font-size:13px;margin-top:16px">Already have account? <a href="/login" style="color:#f59e0b;text-decoration:none;font-weight:700">Sign In</a></p>
+</div>
+</body>
+</html>
