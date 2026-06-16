@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Setup Reseller Account - FF PANELS</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#060d18;color:#fff;font-family:'Segoe UI',sans-serif;min-height:100vh}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulsePurple{0%,100%{box-shadow:0 0 15px rgba(168,85,247,.3)}50%{box-shadow:0 0 35px rgba(168,85,247,.8),0 0 70px rgba(168,85,247,.2)}}
+@keyframes floatOrb{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+@keyframes shimmer{0%{background-position:-300% center}100%{background-position:300% center}}
+@keyframes ripple{0%{transform:scale(0);opacity:.4}100%{transform:scale(4);opacity:0}}
+@keyframes borderGlow{0%,100%{border-color:rgba(168,85,247,.2)}50%{border-color:rgba(168,85,247,.6)}}
+@keyframes checkIn{0%{transform:scale(0) rotate(-45deg);opacity:0}100%{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes starPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
+
+.bg-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.orb1{width:320px;height:320px;top:-80px;right:-80px;background:radial-gradient(circle,rgba(168,85,247,.12),transparent 70%);animation:floatOrb 7s ease-in-out infinite}
+.orb2{width:260px;height:260px;bottom:-60px;left:-60px;background:radial-gradient(circle,rgba(245,158,11,.07),transparent 70%);animation:floatOrb 9s ease-in-out infinite reverse}
+.orb3{width:200px;height:200px;top:40%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(59,130,246,.05),transparent 70%);animation:floatOrb 11s ease-in-out infinite}
+
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(6,13,24,.97);border-bottom:1px solid rgba(168,85,247,.15);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.hdr-logo{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800}
+.hdr-logo .ico{width:32px;height:32px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:8px;display:flex;align-items:center;justify-content:center;animation:pulsePurple 3s infinite}
+.hdr-logo span{color:#a855f7}
+
+.scrl{flex:1;overflow-y:auto;padding:20px 16px 40px}
+
+.top-card{background:linear-gradient(135deg,#12052a,#1a0735);border:1px solid rgba(168,85,247,.3);border-radius:20px;padding:22px;margin-bottom:20px;text-align:center;animation:fadeUp .4s ease,borderGlow 3s infinite;position:relative;overflow:hidden}
+.top-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(168,85,247,.08),transparent 60%)}
+.step-ico{width:70px;height:70px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 30px rgba(168,85,247,.5);animation:pulsePurple 3s infinite}
+.top-card h2{font-size:20px;font-weight:900;margin-bottom:6px}
+.top-card h2 span{color:#a855f7}
+.top-card p{color:#94a3b8;font-size:13px}
+
+.form-card{background:#0a1628;border:1px solid rgba(168,85,247,.15);border-radius:18px;padding:20px;margin-bottom:14px;animation:fadeUp .4s .1s ease both;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.lbl{color:#94a3b8;font-size:11px;letter-spacing:2px;margin-bottom:6px;display:block;font-weight:600}
+.inp-wrap{position:relative;margin-bottom:14px}
+.inp{width:100%;background:#0f2748;border:1px solid #1e3a5f;border-radius:12px;padding:14px 46px 14px 16px;color:#fff;font-size:15px;outline:none;transition:all .25s;font-family:inherit}
+.inp:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.12)}
+.eye-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#475569;display:flex;align-items:center;transition:.2s}
+.eye-btn:active{transform:translateY(-50%) scale(.85)}
+
+.cost-row{background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15);border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cost-row p:first-child{color:#94a3b8;font-size:13px}
+.cost-row p:last-child{color:#f59e0b;font-size:18px;font-weight:900}
+
+.submit-btn{
+  width:100%;
+  background:linear-gradient(135deg,#7c3aed,#a855f7,#7c3aed);
+  background-size:200% auto;
+  border:none;border-radius:14px;padding:18px;
+  color:#fff;font-size:16px;font-weight:900;cursor:pointer;
+  font-family:inherit;letter-spacing:.5px;
+  box-shadow:0 8px 25px rgba(168,85,247,.5);
+  transition:all .25s;position:relative;overflow:hidden;
+  animation:pulsePurple 2.5s infinite;
+}
+.submit-btn:active{transform:scale(.97)}
+.ripple-el{position:absolute;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);animation:ripple .6s ease;pointer-events:none}
+
+.flash{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;font-weight:600;animation:fadeUp .3s ease}
+.flash.error{background:#2d0a0a;border:1px solid #ef4444;color:#ef4444}
+
+.info-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.info-row:last-child{border-bottom:none}
+.info-dot{width:6px;height:6px;border-radius:50%;background:#a855f7;flex-shrink:0}
+.info-row p{color:#64748b;font-size:12px;line-height:1.4}
+
+.back-btn{color:#94a3b8;text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;padding:6px 10px;border-radius:8px;border:1px solid #1e3a5f;transition:.2s}
+.back-btn:active{background:rgba(255,255,255,.05)}
+</style>
+</head>
+<body>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+<div class="app">
+  <div class="hdr">
+    <a href="/become-reseller" class="back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div class="hdr-logo">
+      <div class="ico">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      FF <span>RESELLER</span>
+    </div>
+    <div style="width:70px"></div>
+  </div>
+  <div class="scrl">
+    {% with msgs = get_flashed_messages(with_categories=true) %}{% for c,m in msgs %}<div class="flash {{c}}">{{m}}</div>{% endfor %}{% endwith %}
+
+    <div class="top-card">
+      <div class="step-ico">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h2>Setup Your <span>Reseller</span> Account</h2>
+      <p>Choose a unique username and password for your reseller panel</p>
+    </div>
+
+    <div class="form-card">
+      <div class="cost-row">
+        <p>Amount to deduct</p>
+        <p>₹{{ reseller_price|int }}</p>
+      </div>
+
+      <form method="POST" action="/become-reseller" id="setupForm">
+        <input type="hidden" name="action" value="create">
+
+        <label class="lbl">RESELLER USERNAME</label>
+        <div class="inp-wrap">
+          <input class="inp" style="padding-right:16px" name="res_username" placeholder="Choose a unique username" autocomplete="off" required>
+        </div>
+
+        <label class="lbl">RESELLER PASSWORD</label>
+        <div class="inp-wrap">
+          <input class="inp" type="password" name="res_password" id="pw1" placeholder="Min 6 characters" required>
+          <button type="button" class="eye-btn" onclick="togglePw('pw1','eye1')">
+            <svg id="eye1" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <label class="lbl">CONFIRM PASSWORD</label>
+        <div class="inp-wrap">
+          <input class="inp" type="password" name="res_confirm" id="pw2" placeholder="Re-enter password" required>
+          <button type="button" class="eye-btn" onclick="togglePw('pw2','eye2')">
+            <svg id="eye2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <button type="submit" class="submit-btn" id="createBtn" onclick="addRipple(event,this)">
+          Create Reseller Account — ₹{{ reseller_price|int }}
+        </button>
+      </form>
+
+      <div style="margin-top:16px">
+        <div class="info-row"><div class="info-dot"></div><p>Your ₹{{ reseller_price|int }} will be deducted from your balance</p></div>
+        <div class="info-row"><div class="info-dot"></div><p>Username and password cannot be changed after creation</p></div>
+        <div class="info-row"><div class="info-dot"></div><p>Keep your credentials safe and private</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function togglePw(id, eyeId){
+  var i=document.getElementById(id);
+  i.type = i.type==='password' ? 'text' : 'password';
+}
+function addRipple(e, btn){
+  var rect=btn.getBoundingClientRect();
+  var el=document.createElement('span');
+  el.className='ripple-el';
+  var size=Math.max(btn.offsetWidth,btn.offsetHeight)*2;
+  el.style.cssText='width:'+size+'px;height:'+size+'px;left:'+(e.clientX-rect.left-size/2)+'px;top:'+(e.clientY-rect.top-size/2)+'px';
+  btn.appendChild(el);
+  setTimeout(function(){el.remove()},600);
+}
+document.getElementById('setupForm').addEventListener('submit',function(e){
+  var p1=document.getElementById('pw1').value;
+  var p2=document.getElementById('pw2').value;
+  if(p1 !== p2){
+    e.preventDefault();
+    alert('Passwords do not match!');
+    return false;
+  }
+});
+</script>
+</body>
+</html>

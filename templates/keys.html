@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block mn_keys %}active{% endblock %}
+{% block body %}
+<div class="app">
+  <div class="hdr">
+    <button class="menu-btn" onclick="openMenu()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="19" r="1.2" fill="currentColor"/></svg>
+    </button>
+    <div class="hdr-logo"><div class="ico">⚡</div>FF <span>PANELS</span></div>
+    <a href="/add-money" class="hdr-bal">💳 ₹{{ "%.0f"|format(user.balance) }}</a>
+  </div>
+  <div class="scrl">
+    {% with msgs = get_flashed_messages(with_categories=true) %}{% for c,m in msgs %}<div class="flash {{c}}">{{m}}</div>{% endfor %}{% endwith %}
+    <h2 class="page-title">🔑 My Orders</h2>
+    <a href="/store" class="btn btn-blue btn-w btn-glow-blue fade-up" style="display:block;text-align:center;text-decoration:none;margin-bottom:14px;padding:13px">🛒 Buy New Keys</a>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div class="card fade-up" style="text-align:center;padding:10px 6px;margin:0"><p style="color:var(--muted);font-size:9px;letter-spacing:1px;margin-bottom:3px">TOTAL</p><h3 style="font-size:22px;font-weight:900">{{ orders|length + key_reqs|length }}</h3></div>
+      <div class="card fade-up" style="text-align:center;padding:10px 6px;margin:0"><p style="color:var(--green);font-size:9px;letter-spacing:1px;margin-bottom:3px">DELIVERED</p><h3 style="font-size:22px;font-weight:900;color:var(--green)">{{ delivered }}</h3></div>
+      <div class="card fade-up" style="text-align:center;padding:10px 6px;margin:0"><p style="color:var(--gold);font-size:9px;letter-spacing:1px;margin-bottom:3px">PENDING</p><h3 style="font-size:22px;font-weight:900;color:var(--gold)">{{ pending }}</h3></div>
+    </div>
+
+    {% if pending > 0 %}
+    <div class="card fade-up" style="border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.05);margin-bottom:14px">
+      <p style="color:#f59e0b;font-weight:700;font-size:13px;margin-bottom:8px">⏳ Pending Key Requests</p>
+      {% for req in key_reqs %}{% if req.status=='pending' %}
+      <div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+        <p style="font-weight:700;font-size:13px">{{ req.cat_name }}</p>
+        <p style="color:#3b82f6;font-size:12px">{{ req.plan_label }}</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+          <span style="background:rgba(245,158,11,.15);color:#f59e0b;border-radius:8px;padding:3px 10px;font-size:10px;font-weight:700">⏳ Admin will deliver key</span>
+          <span style="color:#f59e0b;font-weight:800">{% if req.plan_price==0 %}FREE{% else %}₹{{ req.plan_price|int }}{% endif %}</span>
+        </div>
+      </div>
+      {% endif %}{% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not orders %}
+    <div class="fade-up" style="text-align:center;padding:40px 20px;color:var(--dim)">
+      <p style="font-size:46px;margin-bottom:10px">📦</p>
+      <p style="font-size:15px;margin-bottom:14px">No orders yet!</p>
+    </div>
+    {% else %}
+    {% for o in orders %}
+    <div class="card fade-up" style="margin-bottom:10px;border:1px solid rgba(16,185,129,.1);animation-delay:{{ loop.index0*0.06 }}s">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <span style="color:var(--green);font-weight:700;font-size:12px">✅ Delivered</span>
+        <button onclick="copyKey('{{ o.key_code }}',this)" style="background:#052e16;border:1px solid rgba(16,185,129,.3);color:#10b981;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:10px;font-family:monospace;max-width:60%;word-break:break-all;text-align:right">{{ o.key_code }} 📋</button>
+      </div>
+      <h4 style="font-size:14px;font-weight:700;margin-bottom:2px">{{ o.cat_name }}</h4>
+      <p style="color:#3b82f6;font-size:12px;margin-bottom:6px">{{ o.plan_label }}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="color:var(--dim);font-size:10px">{{ o.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+        <span style="color:var(--gold);font-weight:800;font-size:15px">{% if o.price==0 %}FREE{% else %}₹{{ o.price|int }}{% endif %}</span>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+  <nav class="bnav">
+    <a href="/home">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
+      Home
+    </a>
+    <a href="/store">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Store
+    </a>
+    <a href="/keys" class="active">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="15" r="4"/><path d="M12 15h8M16 11v8"/></svg>
+      Keys
+    </a>
+    <a href="/profile">
+      <svg class="bnav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+  </nav>
+</div>
+<script>
+function copyKey(key,btn){navigator.clipboard.writeText(key).then(function(){var old=btn.innerHTML;btn.innerHTML='✅ Copied!';btn.style.background='#052e16';btn.style.color='#10b981';setTimeout(function(){btn.innerHTML=old;},2000);});}
+</script>
+{% endblock %}
